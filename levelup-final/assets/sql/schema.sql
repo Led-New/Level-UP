@@ -1,6 +1,6 @@
 -- ============================================
 -- DATABASE SCHEMA - LEVEL UP YOUR LIFE
--- Sistema RPG de Gamificação de Vida Real
+-- VERSÃO CORRIGIDA - SEM PALAVRAS RESERVADAS
 -- ============================================
 
 CREATE DATABASE IF NOT EXISTS levelup_life CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -25,12 +25,12 @@ CREATE TABLE users (
 CREATE TABLE characters (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    class ENUM('Guerreiro', 'Assassino', 'Mago', 'Estrategista') NOT NULL,
-    level INT DEFAULT 1,
+    char_name VARCHAR(100) NOT NULL,
+    char_class ENUM('Guerreiro', 'Assassino', 'Mago', 'Estrategista') NOT NULL,
+    char_level INT DEFAULT 1,
     current_xp INT DEFAULT 0,
     xp_to_next_level INT DEFAULT 100,
-    rank ENUM('E', 'D', 'C', 'B', 'A', 'S') DEFAULT 'E',
+    char_rank ENUM('E', 'D', 'C', 'B', 'A', 'S') DEFAULT 'E',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -90,8 +90,8 @@ CREATE TABLE daily_answers (
 -- ============================================
 CREATE TABLE challenges (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    description TEXT,
+    challenge_title VARCHAR(200) NOT NULL,
+    challenge_description TEXT,
     challenge_type ENUM('daily', 'weekly', 'special') DEFAULT 'daily',
     xp_reward INT DEFAULT 50,
     attribute_reward JSON,
@@ -121,8 +121,8 @@ CREATE TABLE character_challenges (
 -- ============================================
 CREATE TABLE achievements (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(200) NOT NULL,
-    description TEXT,
+    achievement_name VARCHAR(200) NOT NULL,
+    achievement_description TEXT,
     icon VARCHAR(100),
     requirement_type ENUM('level', 'streak', 'attribute', 'challenge_count') NOT NULL,
     requirement_value INT NOT NULL,
@@ -151,9 +151,9 @@ CREATE TABLE progress_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     character_id INT NOT NULL,
     log_date DATE NOT NULL,
-    level INT NOT NULL,
+    history_level INT NOT NULL,
     total_xp INT NOT NULL,
-    rank VARCHAR(10),
+    history_rank VARCHAR(10),
     attributes_snapshot JSON,
     challenges_completed INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -180,7 +180,7 @@ INSERT INTO questions (question_text, question_type, category, impact_attribute,
 -- ============================================
 -- DADOS INICIAIS: challenges
 -- ============================================
-INSERT INTO challenges (title, description, xp_reward, attribute_reward, difficulty) VALUES
+INSERT INTO challenges (challenge_title, challenge_description, xp_reward, attribute_reward, difficulty) VALUES
 ('Sono Regular', 'Dormir antes das 23h', 50, '{"energy": 2}', 'easy'),
 ('Treino Diário', 'Treinar por pelo menos 20 minutos', 100, '{"strength": 3, "discipline": 1}', 'medium'),
 ('Sessão de Estudos', 'Estudar por 30 minutos ou mais', 100, '{"intelligence": 3, "discipline": 1}', 'medium'),
@@ -190,7 +190,7 @@ INSERT INTO challenges (title, description, xp_reward, attribute_reward, difficu
 -- ============================================
 -- DADOS INICIAIS: achievements
 -- ============================================
-INSERT INTO achievements (name, description, requirement_type, requirement_value, xp_bonus) VALUES
+INSERT INTO achievements (achievement_name, achievement_description, requirement_type, requirement_value, xp_bonus) VALUES
 ('Primeiro Passo', 'Alcance o nível 2', 'level', 2, 50),
 ('Ascensão', 'Alcance o nível 5', 'level', 5, 150),
 ('Veterano', 'Alcance o nível 10', 'level', 10, 500),
